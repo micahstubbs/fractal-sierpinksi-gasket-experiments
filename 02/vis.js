@@ -1,61 +1,63 @@
-const img_width = 400;
-const img_height = 400;
+/* global d3 */
+
+const imgWidth = 400;
+const imgHeight = 400;
 
 d3.select('body').append('div')
   .attr('id', 'sg');
 
 // create original canvas that will be iterated on
 function init() {
-  const original_canvas = d3.select('#sg')
+  const originalCanvas = d3.select('#sg')
     .append('canvas')
-    .attr('height', img_height)
-    .attr('width', img_width)
+    .attr('height', imgHeight)
+    .attr('width', imgWidth)
     .attr('position', 'absolute')
     .attr('id', 'f0');
 
-  const original_context = original_canvas
+  const originalContext = originalCanvas
     .node()
     .getContext('2d');
 
-  original_context.fillStyle = 'green';
-  original_context.fillRect(0, 0, img_width, img_height);
+  originalContext.fillStyle = 'green';
+  originalContext.fillRect(0, 0, imgWidth, imgHeight);
 
-  return [original_canvas, original_context];
+  return [originalCanvas, originalContext];
 }
 
 // determine the rules for creating the fractal
-function fractal(original_canvas, original_context, id) {
-  const new_canvas = d3.select('#sg')
+function fractal(originalCanvas, originalContext, id) {
+  const newCanvas = d3.select('#sg')
     .append('canvas')
-    .attr('height', img_height)
-    .attr('width', img_width)
+    .attr('height', imgHeight)
+    .attr('width', imgWidth)
     .attr('position', 'absolute')
     .attr('transform', 'translate(0,0)')
     .attr('id', `f${id}`);
 
-  const new_context = new_canvas
+  const newContext = newCanvas
     .node()
     .getContext('2d');
 
-    // everything entered into new_canvas is scaled-down to half in both x and y
-  new_context.scale(0.5, 0.5);
+    // everything entered into newCanvas is scaled-down to half in both x and y
+  newContext.scale(0.5, 0.5);
 
-    // scaled-down copy of original_canvas is put on top-left corner
-  new_context.drawImage(original_canvas._groups[0][0], 0, 0);
+    // scaled-down copy of originalCanvas is put on top-left corner
+  newContext.drawImage(originalCanvas._groups[0][0], 0, 0);
 
-    // scaled-down copy of original_canvas is put on bottom-left corner
-  new_context.drawImage(original_canvas._groups[0][0], 0, img_height);
+    // scaled-down copy of originalCanvas is put on bottom-left corner
+  newContext.drawImage(originalCanvas._groups[0][0], 0, imgHeight);
 
     // scaled-down copy of original canvas is put on bottom-right corner
-  new_context.drawImage(original_canvas._groups[0][0], img_width, img_height);
+  newContext.drawImage(originalCanvas._groups[0][0], imgWidth, imgHeight);
 
-  new_context.font = '30px Arial';
-  new_context.fillText(`Iteration: ${id}`, img_width, img_height / 2);
+  newContext.font = '30px Arial';
+  newContext.fillText(`Iteration: ${id}`, imgWidth, imgHeight / 2);
 
     // remove orignal_canvas so that there is only one canvas on the screen
   d3.select(`#f${id - 1}`).remove();
 
-  return [new_canvas, new_context];
+  return [newCanvas, newContext];
 }
 
 function draw(iterations) {
