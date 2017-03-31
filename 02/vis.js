@@ -1,19 +1,19 @@
-        var img_width = 400,
-            img_height = 400;
+        const img_width = 400;
+        const img_height = 400;
 
         d3.select('body').append('div')
           .attr('id', 'sg');
-        
+
         //create original canvas that will be iterated on
         function init(){
-            var original_canvas = d3.select('#sg')
+            const original_canvas = d3.select('#sg')
                 .append('canvas')
                 .attr('height', img_height)
                 .attr('width', img_width)
                 .attr('position', 'absolute')
                 .attr('id', 'f0');
 
-            var original_context = original_canvas
+            const original_context = original_canvas
                 .node()
                 .getContext('2d');
 
@@ -22,18 +22,18 @@
             
             return [original_canvas, original_context]
         }
-            
+
         //determine the rules for creating the fractal
         function fractal(original_canvas, original_context, id){
-            var new_canvas = d3.select('#sg')
+            const new_canvas = d3.select('#sg')
                 .append('canvas')
                 .attr('height', img_height)
                 .attr('width', img_width)
                 .attr('position', 'absolute')
                 .attr('transform', 'translate(0,0)')
-                .attr('id', 'f' + id);
+                .attr('id', `f${id}`);
             
-            var new_context = new_canvas
+            const new_context = new_canvas
                 .node()
                 .getContext('2d');
             
@@ -50,20 +50,20 @@
             new_context.drawImage(original_canvas._groups[0][0], img_width, img_height);
             
             new_context.font = '30px Arial';
-            new_context.fillText('Iteration: ' + id, img_width, img_height/2);
+            new_context.fillText(`Iteration: ${id}`, img_width, img_height/2);
             
             //remove orignal_canvas so that there is only one canvas on the screen
-            d3.select('#f'+(id-1)).remove();
+            d3.select(`#f${id-1}`).remove();
             
             return [new_canvas, new_context];
         }
 
         function draw(iterations){
-            var now = 1
-            var canvases = [init()]
+            let now = 1;
+            const canvases = [init()];
             
             //show change at each interation
-            var animate = setInterval(function(){update()}, 1000);
+            const animate = setInterval(() => {update()}, 1000);
             
             //go through the rules for creating fractals until the desired number of iterations are hit 
             function update(){
@@ -75,5 +75,5 @@
                }
             }
         }
-        
+
         draw(14);
